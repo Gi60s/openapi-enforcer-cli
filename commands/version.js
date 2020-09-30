@@ -15,13 +15,18 @@
  *    limitations under the License.
  **/
 'use strict'
-const version = require('../package.json').version
+const cliVersion = require('../package.json').version
+const enforcerPath = require.resolve('openapi-enforcer')
+const path = require('path')
+
+const enforcerVersion = require(path.resolve(path.dirname(enforcerPath), 'package.json')).version
 
 module.exports = function (program) {
   program
     .command('version')
     .description('Get the installed version number')
     .action(() => {
-      console.log(version)
+      console.log('CLI v' + cliVersion)
+      console.log('OpenAPI Enforcer v' + enforcerVersion)
     })
 }
