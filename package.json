@@ -1,21 +1,21 @@
 {
   "name": "openapi-enforcer-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "A command line tool for the openapi enforcer libraries",
   "main": "index.js",
   "bin": {
     "openapi-enforcer": "./bin/index.js"
   },
   "dependencies": {
-    "chokidar": "^3.2.2",
+    "chokidar": "^3.4.2",
     "cli-format": "^3.0.9",
-    "commander": "^2.19.0",
-    "debug": "^4.1.1",
-    "ejs": "^2.6.1",
+    "commander": "^2.20.3",
+    "debug": "^4.2.0",
+    "ejs": "^2.7.4",
     "execa": "^1.0.0",
     "express": "^4.17.1",
     "json-schema-ref-parser": "^7.1.4",
-    "openapi-enforcer": "^1.10.0",
+    "openapi-enforcer": "^1.10.8",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
