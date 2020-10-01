@@ -24,6 +24,10 @@
   "scripts": {
     "test": "mocha test"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/Gi60s/openapi-enforcer-cli"
+  },
   "keywords": [
     "openapi",
     "swagger",
