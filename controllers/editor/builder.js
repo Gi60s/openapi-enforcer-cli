@@ -18,20 +18,26 @@ function Builder (source, componentOptions) {
   factory.build = async function () {
     console.log('\n--- BUILDING ' + (new Date()).toLocaleString() + ' ---\n')
 
-    const openApiDoc = await RefParser.bundle(source)
-    const [ , err, warn ] = await Enforcer(openApiDoc, {
-      fullResult: true,
-      componentOptions: Object.assign({}, componentOptions)
-    })
-    if (err) {
-      console.log(err.toString())
+    const openApiDoc = await Enforcer.bundle(source)
+    if (openApiDoc.error) {
+      console.log(openApiDoc.error.toString())
       console.log('\nBuild failed\n')
-      throw err
+      throw openApiDoc.error
     } else {
-      if (warn) console.log(warn.toString())
-      cache = openApiDoc
-      console.log('\nBuilt successfully\n')
-      return cache
+      const [, err, warn] = await Enforcer(openApiDoc.value, {
+        fullResult: true,
+        componentOptions: Object.assign({}, componentOptions)
+      })
+      if (err) {
+        console.log(err.toString())
+        console.log('\nBuild failed\n')
+        throw err
+      } else {
+        if (warn) console.log(warn.toString())
+        cache = openApiDoc
+        console.log('\nBuilt successfully\n')
+        return cache
+      }
     }
   }
 
