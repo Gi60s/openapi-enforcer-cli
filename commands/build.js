@@ -24,6 +24,8 @@ module.exports = async function (program) {
     .command('build <oas-doc> <out-path>')
     .description('Dereference and build a single OpenAPI file from multiple sources')
     .action(async (oasDoc, outPath) => {
+      oasDoc = path.resolve(process.cwd(), oasDoc)
+      outPath = path.resolve(process.cwd(), outPath)
       try {
         if (!/\.json$/.test(outPath)) {
           console.log('The output path must be a JSON file.')
