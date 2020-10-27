@@ -33,11 +33,12 @@ module.exports = async function (program) {
           const builder = Builder(oasDoc)
           builder.build()
             .then(obj => {
-              fs.writeFile(path.resolve(process.cwd(), outPath), JSON.stringify(obj, null, 2), function (err) {
+              const outFile = path.resolve(process.cwd(), outPath)
+              fs.writeFile(outFile, JSON.stringify(obj, null, 2), function (err) {
                 if (err) {
                   console.error(err.stack)
                 } else {
-                  console.log('Built')
+                  console.log('Build saved to: ' + outFile)
                 }
               })
             })
