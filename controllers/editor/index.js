@@ -54,18 +54,25 @@ exports.build = function (openApiDocPath, buildDirectory, { componentOptions, wa
   let buildError
 
   if (watch) {
-    builder.watch((err, doc) => {
+    builder.watch((err, data) => {
       if (err) {
         buildError = err.toString()
         trigger('build-error', buildError)
       } else {
-        openapi = doc
-        buildError = false
-        trigger('refresh')
-        if (buildDirectory) {
-          fs.writeFile(path.resolve(buildDirectory, 'openapi.json'), JSON.stringify(openapi, null, 2), err => {
-            if (err) console.error(err.stack)
-          })
+        const [ doc, error, warn ] = data
+        if (error) {
+          buildError = err.toString()
+          trigger('build-error', buildError)
+        } else {
+          if (warn) console.warn(warn)
+          openapi = doc
+          buildError = false
+          trigger('refresh')
+          if (buildDirectory) {
+            fs.writeFile(path.resolve(buildDirectory, 'openapi.json'), JSON.stringify(openapi, null, 2), err => {
+              if (err) console.error(err.stack)
+            })
+          }
         }
       }
     })
@@ -74,12 +81,15 @@ exports.build = function (openApiDocPath, buildDirectory, { componentOptions, wa
   if (buildDirectory) {
     ensureDirectory(buildDirectory)
       .then(() => copyDir(path.resolve(__dirname, 'build'), buildDirectory))
-      .then(() => {
+      .then(async () => {
         if (!watch) {
+          const [ openapi, error, warn ] = await builder.build()
+          if (error) throw Error(error.toString())
+          if (warn) console.warn(warn)
+
           return new Promise((resolve, reject) => {
             fs.writeFile(path.resolve(buildDirectory, 'openapi.json'), JSON.stringify(openapi, null, 2), err => {
               if (err) return reject(err)
-              console.log('Built successfully')
               resolve()
             })
           })

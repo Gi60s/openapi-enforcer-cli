@@ -32,15 +32,21 @@ module.exports = async function (program) {
         } else {
           const builder = Builder(oasDoc)
           builder.build()
-            .then(obj => {
-              const outFile = path.resolve(process.cwd(), outPath)
-              fs.writeFile(outFile, JSON.stringify(obj, null, 2), function (err) {
-                if (err) {
-                  console.error(err.stack)
-                } else {
-                  console.log('Build saved to: ' + outFile)
-                }
-              })
+            .then(data => {
+              if (data.error) {
+                console.error(data.error)
+              } else if (data.warning) {
+                console.warn(data.warning)
+              } else {
+                const outFile = path.resolve(process.cwd(), outPath)
+                fs.writeFile(outFile, JSON.stringify(data.value, null, 2), function (err) {
+                  if (err) {
+                    console.error(err.stack)
+                  } else {
+                    console.log('Build saved to: ' + outFile)
+                  }
+                })
+              }
             })
         }
       } catch (err) {
