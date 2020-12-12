@@ -48,6 +48,9 @@ module.exports = async function (program) {
                 })
               }
             })
+            .catch(e => {
+              console.error(e)
+            })
         }
       } catch (err) {
         console.error(err.message)
